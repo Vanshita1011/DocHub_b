@@ -1,0 +1,37 @@
+# Ignore environment variables
+.env
+
+# Ignore node modules
+/node_modules
+
+# Ignore logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Ignore build output
+/dist
+/build
+
+# Ignore temporary files
+/tmp
+/temp
+*.tmp
+
+# Ignore uploads
+/uploads
+
+# Ignore database files
+*.sqlite
+*.sqlite3
+
+# Ignore OS generated files
+.DS_Store
+Thumbs.db
+
+# Ignore IDE specific files
+.vscode
+.idea
+*.swp
