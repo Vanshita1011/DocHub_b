@@ -8,6 +8,7 @@ const userRoutes = require("./routes/userRoutes");
 const doctorRoutes = require("./routes/doctorRoutes"); // Import doctorRoutes
 const admin = require("./routes/admin"); // Import adminRoutes
 const slotRoutes = require("./routes/slotRoutes");
+const queryRoutes = require("./routes/queryRoutes");
 const multer = require("multer");
 const mongoose = require("mongoose");
 
@@ -46,6 +47,7 @@ app.use("/api/users", userRoutes);
 app.use("/api/admin", admin); // Import adminRoutes);
 app.use("/api/doctors", doctorRoutes); //  doctor routes
 app.use("/api/slots", slotRoutes);
+app.use("/api/queries", queryRoutes);
 
 const Image = mongoose.model("Image", { Img_Url: String });
 app.post("/", upload.single("img"), async (req, res) => {
