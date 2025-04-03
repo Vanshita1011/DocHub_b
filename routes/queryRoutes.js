@@ -23,4 +23,22 @@ router.get("/", async (req, res) => {
   }
 });
 
+// Update a query with admin response
+router.put("/:id", async (req, res) => {
+  try {
+    const { adminResponse } = req.body;
+    const updatedQuery = await Query.findByIdAndUpdate(
+      req.params.id,
+      { adminResponse },
+      { new: true }
+    );
+    if (!updatedQuery) {
+      return res.status(404).json({ message: "Query not found" });
+    }
+    res.status(200).json(updatedQuery);
+  } catch (error) {
+    res.status(500).json({ message: "Error updating query response" });
+  }
+});
+
 module.exports = router;
