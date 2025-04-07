@@ -27,7 +27,6 @@ const storage = multer.diskStorage({
   },
   filename: function (req, file, cb) {
     console.log("insidefilename fxn", file);
-
     cb(null, file.originalname);
   },
 });
