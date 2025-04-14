@@ -71,19 +71,4 @@ router.delete("/:id", async (req, res) => {
   }
 });
 
-// routes/appointments.js
-router.put("/:id", async (req, res) => {
-  try {
-    const { appointmentDate, timeSlot } = req.body;
-    const updated = await Appointment.findByIdAndUpdate(
-      req.params.id,
-      { appointmentDate, timeSlot },
-      { new: true }
-    );
-    res.json(updated);
-  } catch (err) {
-    res.status(500).json({ error: "Update failed" });
-  }
-});
-
 module.exports = router;
