@@ -2,6 +2,12 @@ const User = require("../models/User");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 
+const multer = require("multer");
+const cloudinary = require("cloudinary").v2;
+
+const storage = multer.diskStorage({});
+const upload = multer({ storage });
+
 // Register a new user
 const register = async (req, res) => {
   const { email, password, age, mobile, gender, dateOfBirth } = req.body;
@@ -25,6 +31,13 @@ const register = async (req, res) => {
       calculatedAge--;
     }
 
+    // Handle optional profile image upload
+    let profileImage = "";
+    if (req.file) {
+      const result = await cloudinary.uploader.upload(req.file.path);
+      profileImage = result.secure_url;
+    }
+
     // Create and save a new user
     const newUser = new User({
       email,
@@ -33,6 +46,7 @@ const register = async (req, res) => {
       mobile,
       gender,
       dateOfBirth,
+      profileImage,
     });
 
     await newUser.save();
