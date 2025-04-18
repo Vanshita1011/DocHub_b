@@ -30,6 +30,10 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  profileImage: {
+    type: String,
+    default: "", // Optional field for storing the image URL
+  },
 });
 
 // Password hashing before saving

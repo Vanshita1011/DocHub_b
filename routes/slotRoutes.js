@@ -96,4 +96,23 @@ router.delete("/:id", async (req, res) => {
   }
 });
 
+// POST /slots
+router.post("/", async (req, res) => {
+  try {
+    const { doctorId, doctorName, hospital, appointmentDate, timeSlot } =
+      req.body;
+    const newSlot = new Slot({
+      doctor: doctorId,
+      doctorName,
+      hospital,
+      appointmentDate,
+      timeSlot,
+    });
+    await newSlot.save();
+    res.status(201).json(newSlot);
+  } catch (error) {
+    res.status(500).json({ message: "Failed to create slot", error });
+  }
+});
+
 module.exports = router;
