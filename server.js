@@ -9,7 +9,6 @@ const doctorRoutes = require("./routes/doctorRoutes"); // Import doctorRoutes
 const admin = require("./routes/admin"); // Import adminRoutes
 const slotRoutes = require("./routes/slotRoutes");
 const queryRoutes = require("./routes/queryRoutes");
-const availabilityRoutes = require("./routes/availabilityRoutes");
 const multer = require("multer");
 const mongoose = require("mongoose");
 
@@ -36,15 +35,8 @@ const upload = multer({ storage: storage });
 
 const app = express();
 
-const corsOptions = {
-  origin: "https://doc-hub-three.vercel.app", // Replace with your frontend's URL
-  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-  credentials: true, // Allow cookies if needed
-};
-
 // Middleware
 app.use(cors());
-app.use(cors(corsOptions));
 app.use(express.json());
 
 // Routes
@@ -55,7 +47,6 @@ app.use("/api/admin", admin); // Import adminRoutes);
 app.use("/api/doctors", doctorRoutes); //  doctor routes
 app.use("/api/slots", slotRoutes);
 app.use("/api/queries", queryRoutes);
-app.use("/api/availability", availabilityRoutes);
 
 const Image = mongoose.model("Image", { Img_Url: String });
 app.post("/", upload.single("img"), async (req, res) => {
