@@ -48,7 +48,7 @@ app.use("/api/admin", admin); // Import adminRoutes);
 app.use("/api/doctors", doctorRoutes); //  doctor routes
 app.use("/api/slots", slotRoutes);
 app.use("/api/queries", queryRoutes);
-app.use("/availibility", availabilityRoutes);
+app.use("/api/availibility", availabilityRoutes);
 
 const Image = mongoose.model("Image", { Img_Url: String });
 app.post("/", upload.single("img"), async (req, res) => {
