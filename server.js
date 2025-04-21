@@ -36,8 +36,15 @@ const upload = multer({ storage: storage });
 
 const app = express();
 
+const corsOptions = {
+  origin: "https://doc-hub-three.vercel.app", // Replace with your frontend's URL
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+  credentials: true, // Allow cookies if needed
+};
+
 // Middleware
 app.use(cors());
+app.use(cors(corsOptions));
 app.use(express.json());
 
 // Routes
