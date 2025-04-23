@@ -2,6 +2,8 @@ const express = require("express");
 const router = express.Router();
 const Appointment = require("../models/Appointment");
 const sendEmail = require("../utils/email");
+const Doctor = require("../models/doctorModel"); // Import the Doctor model
+
 // const nodemailer = require("nodemailer");
 
 // Create a new appointment
@@ -18,6 +20,13 @@ router.post("/", async (req, res) => {
       age,
       gender,
     } = req.body;
+
+    // Fetch the doctor's name using the doctorId
+    const doctorData = await Doctor.findById(doctor);
+    if (!doctorData) {
+      return res.status(404).json({ message: "Doctor not found" });
+    }
+
     const newAppointment = new Appointment({
       userEmail,
       name,
@@ -38,7 +47,7 @@ router.post("/", async (req, res) => {
       Your appointment has been successfully booked.
 
       Details:
-      - Doctor: ${doctor}
+      - Doctor: ${doctorData.name}
       - Date: ${appointmentDate}
       - Time Slot: ${timeSlot}
       - Hospital: ${hospital}
