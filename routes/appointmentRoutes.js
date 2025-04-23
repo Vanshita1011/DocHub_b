@@ -1,33 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const Appointment = require("../models/Appointment");
-// const sendEmail = require("../utils/email");
-const nodemailer = require("nodemailer");
-
-// Function to send email
-const sendEmail = async (to, subject, text) => {
-  try {
-    const transporter = nodemailer.createTransport({
-      service: "gmail", // Use Gmail or your email service provider
-      auth: {
-        user: process.env.EMAIL_USER, // Your email address
-        pass: process.env.EMAIL_PASS, // Your email password or app-specific password
-      },
-    });
-
-    const mailOptions = {
-      from: process.env.EMAIL_USER, // Sender address
-      to, // Recipient address
-      subject, // Email subject
-      text, // Email body
-    };
-
-    await transporter.sendMail(mailOptions);
-    console.log("Email sent successfully");
-  } catch (error) {
-    console.error("Error sending email:", error);
-  }
-};
+const sendEmail = require("../utils/email");
+// const nodemailer = require("nodemailer");
 
 // Create a new appointment
 router.post("/", async (req, res) => {

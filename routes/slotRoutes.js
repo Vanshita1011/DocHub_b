@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const Slot = require("../models/slotModel");
 const Doctor = require("../models/doctorModel");
+const sendEmail = require("../utils/email");
 
 //  Route to book a slot (ensure logged-in user email is stored)
 router.post("/book-slot", async (req, res) => {
@@ -50,6 +51,26 @@ router.post("/book-slot", async (req, res) => {
     });
 
     await newSlot.save();
+    // Send email notification
+    const emailSubject = "Appointment Confirmation";
+    const emailBody = `
+          Dear ${name},
+
+          Your appointment has been successfully booked.
+
+          Details:
+          - Doctor: ${doctor}
+          - Date: ${appointmentDate}
+          - Time Slot: ${timeSlot}
+          - Hospital: ${hospital}
+
+          Thank you for choosing our platform.
+
+          Regards,
+          DocHub Team
+        `;
+
+    await sendEmail(userEmail, emailSubject, emailBody);
 
     res.status(201).json({ message: "Slot booked successfully", newSlot });
   } catch (error) {
