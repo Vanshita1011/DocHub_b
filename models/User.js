@@ -30,10 +30,8 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  profileImage: {
-    type: String,
-    default: "", // Optional field for storing the image URL
-  },
+  otp: String, // Field to store OTP
+  otpExpire: Date, // Field to store OTP expiration time
 });
 
 // Password hashing before saving

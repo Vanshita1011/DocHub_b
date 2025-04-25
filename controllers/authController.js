@@ -1,4 +1,5 @@
 const User = require("../models/User");
+const sendEmail = require("../utils/email");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 
@@ -52,6 +53,68 @@ const register = async (req, res) => {
   }
 };
 
+// Generate OTP
+const generateOtp = async (req, res) => {
+  const { email } = req.body;
+
+  try {
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ msg: "User not found" });
+    }
+
+    // Generate a 6-digit OTP
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+
+    // Set OTP and expiration time (5 minutes)
+    user.otp = otp;
+    user.otpExpire = Date.now() + 5 * 60 * 1000;
+    await user.save();
+
+    // Send OTP via email
+    const subject = "Your OTP for Login";
+    const message = `Your OTP for login is: ${otp}. It is valid for 5 minutes.`;
+    await sendEmail(user.email, subject, message);
+
+    res.status(200).json({ msg: "OTP sent to your email" });
+  } catch (error) {
+    console.error("Error generating OTP:", error);
+    res.status(500).json({ msg: "Server error" });
+  }
+};
+
+// Verify OTP
+const verifyOtp = async (req, res) => {
+  const { email, otp } = req.body;
+
+  try {
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ msg: "User not found" });
+    }
+
+    // Check if OTP matches and is not expired
+    if (user.otp !== otp || user.otpExpire < Date.now()) {
+      return res.status(400).json({ msg: "Invalid or expired OTP" });
+    }
+
+    // Clear OTP fields after successful verification
+    user.otp = undefined;
+    user.otpExpire = undefined;
+    await user.save();
+
+    // Generate JWT token
+    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
+      expiresIn: "1h",
+    });
+
+    res.status(200).json({ msg: "OTP verified successfully", token });
+  } catch (error) {
+    console.error("Error verifying OTP:", error);
+    res.status(500).json({ msg: "Server error" });
+  }
+};
+
 // Login user
 const login = async (req, res) => {
   const { email, password } = req.body;
@@ -83,4 +146,4 @@ const login = async (req, res) => {
   }
 };
 
-module.exports = { register, login };
+module.exports = { register, login, generateOtp, verifyOtp };
