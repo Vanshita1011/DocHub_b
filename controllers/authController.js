@@ -68,12 +68,12 @@ const generateOtp = async (req, res) => {
 
     // Set OTP and expiration time (5 minutes)
     user.otp = otp;
-    user.otpExpire = Date.now() + 5 * 60 * 1000;
+    user.otpExpire = Date.now() + 2 * 60 * 1000;
     await user.save();
 
     // Send OTP via email
     const subject = "Your OTP for Login";
-    const message = `Your OTP for login is: ${otp}. It is valid for 5 minutes.`;
+    const message = `Your OTP for login is: ${otp}. It is valid for 2 minutes.`;
     await sendEmail(user.email, subject, message);
 
     res.status(200).json({ msg: "OTP sent to your email" });
